@@ -24,7 +24,7 @@ class UserController extends Controller{
 
 		$user->save();
 
-		Auth::login($user);
+		Auth::login($useser);
 
 		return redirect()->route('dashboard');
 	}
@@ -39,5 +39,10 @@ class UserController extends Controller{
 			return redirect()->route('dashboard');
 		}
 		return redirect()->back();
+	}
+
+	public function getLogout(){
+		Auth::logout();
+		return redirect()->route('home');
 	}
 }
