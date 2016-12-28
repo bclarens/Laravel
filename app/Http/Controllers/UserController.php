@@ -24,7 +24,7 @@ class UserController extends Controller{
 
 		$user->save();
 
-		Auth::login($User);
+		Auth::login($user);
 
 		return redirect()->route('dashboard');
 	}
