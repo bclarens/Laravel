@@ -2,8 +2,17 @@
 
 @section('content')
 	@include('includes.message-block')
+	
+
 	<section class="row new-post">
-		<div class="col-md-6 col-md-offset-3">
+		<div class="container-fluid">
+			<div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <!--<a class="navbar-brand" href="index.html">Brand</a>-->
+            </div>
 			<header><h3>What do you have to say?</h3></header>
 			<form action="{{ route('post.create') }}" method="post">
 				<div class="form-group">
@@ -14,8 +23,10 @@
 			</form>
 		</div>
 	</section>
+
+	<!--ORIGINAL CODE
 	<section class="row posts">
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			<header><h3>What other people say...</h3></header>
 			@foreach($posts as $post)
 				<article class="post" data-postid="{{ $post->id }}">
@@ -35,7 +46,45 @@
 				</article>
 			@endforeach
 		</div>
-	</section>
+	</section> -->
+
+	<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            	<header><h3>What other people say...</h3></header>
+            	@foreach($posts as $post)
+                <div class="post-preview" data-postid="{{ $post->id }}">
+                    <a href="post.html">
+                        <h2 class="post-title">
+                            <p>{{ $post->body }}</p>
+                        </h2>
+                    </a>
+                    <p class="post-meta">Posted by <a href="#">{{ $post->user->first_name }}</a> on {{ $post->created_at }}</p>
+                </div>
+                
+                <div class="interaction">
+						<a href="#" class="like">{{ Auth::user()->likes()->where('post_id', $post->id)->first() ? Auth::user()->likes()->where('post_id', $post->id)->first()->like == 1 ? 'You like this post' : 'Like' : 'Like'  }}</a> |
+                        <a href="#" class="like">{{ Auth::user()->likes()->where('post_id', $post->id)->first() ? Auth::user()->likes()->where('post_id', $post->id)->first()->like == 0 ? 'You don\'t like this post' : 'Dislike' : 'Dislike'  }}</a>
+						@if(Auth::user() == $post->user)
+							|
+							<a href="#" class="edit">Edit</a> |
+							<a href="{{ route('post.delete', ['post_id' => $post->id]) }}">Delete</a>
+						@endif
+					</div>
+					<hr>
+                @endforeach
+                
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="next">
+                        <a href="#">Older Posts &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 
 	<div class="modal fade" tabindex="-1" role="dialog" id="edit-modal">
         <div class="modal-dialog">
